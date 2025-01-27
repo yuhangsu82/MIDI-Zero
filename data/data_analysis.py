@@ -86,4 +86,3 @@ if __name__ == '__main__':
     frame_dist_file = "./frame_dist.pkl"
     dur_dist_file = "./duration_dist.pkl"
     extract_frame_distributions(midi_dir, frame_dist_file, source_type="performance", time_resolution=0.05)
-    extract_duration_distribution(midi_dir, dur_dist_file)
