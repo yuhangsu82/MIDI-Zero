@@ -195,7 +195,7 @@ if __name__ == "__main__":
     # gt_file_path = './runs/database/m4singer/query_gt.csv'
     # checkpoint_path = './runs/checkpoint/m4singer.pth'
 
-    eval(db_path, query_path, gt_file_path, checkpoint_path, level='file', note_max=12)
+    eval(db_path, query_path, gt_file_path, checkpoint_path, note_max=12)
 
     # for id in range(0, 31):
     #     checkpoint_path = f'./checkpoint/test/mem_{id}.pth'
