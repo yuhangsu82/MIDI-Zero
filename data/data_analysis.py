@@ -5,7 +5,6 @@ from utils import group_notes_by_frame
 import pickle
 import random
 import numpy as np
-from scipy.stats import gaussian_kde
 import json
 import matplotlib.pyplot as plt
 
@@ -45,23 +44,6 @@ def extract_frame_distributions(midi_dir, save_file_path, source_type="performan
         print(f"frame distributions cached in {save_file_path}")
 
     return frame_unigram, frame_bigram
-
-
-def extract_duration_distribution(midi_dir, save_file_path):
-    durations = []
-    midi_files = [os.path.join(midi_dir, filename) for filename in os.listdir(midi_dir) if filename.endswith('.mid') or filename.endswith('.midi')]
-
-    for midi_file in tqdm(midi_files, desc="Analysing MIDI files"):
-        frame_groups = group_notes_by_frame(midi_file)
-        durations.extend([note.end - note.start for frame in frame_groups for note in frame])
-
-    kde = gaussian_kde(durations)
-    print(len(durations))
-    with open(save_file_path, 'wb') as f:
-        pickle.dump(kde, f)
-    print(f"The duration distribution is cached in {save_file_path}")
-
-    return kde
 
 
 def statistic_distributions(input_file, output_file=None):
