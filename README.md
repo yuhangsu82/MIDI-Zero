@@ -1,88 +1,94 @@
 # MIDI-Zero
 
-**MIDI-Zero** is a self-supervised learning framework for content-based music retrieval (CBMR) tasks, including audio identification, matching, and version identification. Operating entirely on MIDI representations, it eliminates the need for external training data by generating task-specific data automatically, offering a robust and scalable solution for bridging audio and symbolic music retrieval.
+**MIDI-Zero** is a self-supervised learning framework for content-based music retrieval (CBMR), supporting tasks such as **Audio Identification, Audio Matching, and Version Identification**. Operating entirely on **MIDI representations**, it eliminates the need for external labeled data by generating task-specific training data automatically. This provides a **robust and scalable solution** for bridging audio and symbolic music retrieval.
 
 ## **Method Overview**
 
 ![MIDI-Zero Method](https://raw.githubusercontent.com/yuhangsu82/MIDI-Zero/refs/heads/main/assets/f1.jpg?token=GHSAT0AAAAAAC56SEQGHW4SQQ53OUCCRB2CZ4YPQFQ)
 
-### 1. **Input Format (MIDI):**
-   - MIDI data, standardized from either digital scores or user performances, forms the input for this framework.
+### **Processing Pipeline**
+MIDI-Zero standardizes MIDI representations as input, regardless of their origin, and processes them through the following stages:
 
-### 2. **MIDI Representation Processing:**
-   - **Exact Alignment for Digital Scores:** The symbolic MIDI is directly aligned.
-   - **Threshold-based Grouping for Transcribed MIDI:** Due to transcription variations, we apply a **threshold zone** to cluster notes within an acceptable range.
+1. **MIDI Input & Alignment**  
+   - Accepts MIDI from **Digital Scores (e.g., MusicXML, ABC Notation)** and **User Performances (MIDI instruments or transcribed audio)**.
+   - Digital scores are directly aligned, while transcribed MIDI undergoes **threshold-based note grouping** to handle timing variations.
 
-### 3. **Pitch-Matrix Construction:**
-   - A **time ablation process** is applied to both digital and transcribed MIDI, converting them into **Pitch-Matrices**.
-   - Each Pitch-Matrix has a fixed **window length (e.g., 10 frames)**, and they are extracted with a **step size of 2** to create overlapping segments.
+2. **Pitch-Matrix Construction**  
+   - Applies **time ablation** to segment MIDI data into overlapping **Pitch-Matrices** with a fixed window length (e.g., 10 frames) and a step size of 2.
 
-### 4. **Pitch-Matrix Encoding:**
-   - The segmented Pitch-Matrices are fed into a **Pitch-Matrix Encoder**(resnet-based), which transforms them into compact **embeddings**.
-   - These embeddings are later used for CBMR tasks such as Audio Identification, Audio Matching, and Version Identification.
+3. **Feature Encoding**  
+   - A **ResNet-based Pitch-Matrix Encoder** transforms segmented Pitch-Matrices into **compact embeddings**, making them suitable for retrieval tasks.
+
+4. **CBMR Task Execution**  
+   - The embeddings are used for **Audio Identification, Matching, and Version Identification**, enabling efficient retrieval across symbolic and audio music domains.
 
 
-## Training Data Sources
+## **Training Data Sources**
 
-This module provides the `generate_training_data` function to create training datasets for content-based music retrieval tasks. The function supports **four modes**, each corresponding to a specific data source.
+The `generate_training_data` function provides four modes for data generation, ensuring diverse and flexible training samples:
 
----
+### **1. C Mode (Completely Random)**
+- **Source**: Fully synthetic data.  
+- **Description**: Notes in each frame are randomly sampled from a predefined pitch range.  
+- **Real Data Requirement**: ❌ Not required.  
+- **Use Case**: Useful for exploring diverse and randomized inputs.
 
-### 1. **C Mode (Completely Random)**
-- **Source**: Artificially generated data.  
-- Notes in each frame are randomly sampled from a specified pitch range.  
-- **Real Data Requirement**: Not required.  
-- This mode simulates synthetic data for tasks requiring diverse and randomized inputs.  
+### **2. S Mode (Statistical-based)**
+- **Source**: Precomputed statistical distributions.  
+- **Description**: Uses unigram and bigram probabilities from a given `frame_dist_file` to generate structured sequences.  
+- **Real Data Requirement**: ✅ Required to extract statistical distributions.  
+- **Use Case**: Helps in generating data that mimics real-world statistical patterns.
 
----
+### **3. P Mode (Probability-based)**
+- **Source**: Normal distribution sampling.  
+- **Description**: Notes and note counts are sampled using **Normal distributions** for pitch and frame complexity.  
+- **Real Data Requirement**: ❌ Not required.  
+- **Use Case**: Provides a balance between structured and randomized data, allowing for controlled variations.
 
-### 2. **S Mode (Statistical-based)**
-- **Source**: Predefined statistical distributions.  
-- Data is generated based on unigram and bigram probabilities stored in a provided frame distribution file (`frame_dist_file`).  
-- **Real Data Requirement**: Requires real-world data to precompute statistical distributions.  
-- This mode leverages statistical patterns learned from real-world datasets to create more realistic training data.
+### **4. R Mode (Real Data)**
+- **Source**: Authentic MIDI datasets.  
+- **Description**: Uses real-world MIDI files or datasets as direct training data.  
+- **Real Data Requirement**: ✅ Required MIDI datasets.  
+- **Use Case**: Ensures training on real-world compositions for optimal retrieval accuracy.
 
----
-
-### 3. **P Mode (Probability-based)**
-- **Source**: Customizable probability distributions.  
-- Notes and note counts are sampled using Normal distributions for pitch and frame complexity.  
-- **Real Data Requirement**: Not required.  
-- This mode provides a flexible approach to simulate data with specific statistical properties.
-
----
-
-### 4. **R Mode (Real Data)**
-- **Source**: Authentic MIDI files or pre-collected datasets.  
-- **Real Data Requirement**: Requires real-world MIDI files or datasets.  
-- This mode directly utilizes real-world music data, ensuring the highest level of authenticity for training and evaluation.
-
----
-
-### Key Features
-- **Diverse Sources**: Supports both synthetic and real-world data for comprehensive training coverage.
-- **Customizable Parameters**: Allows users to fine-tune pitch range, window length, and distribution properties.
-- **Efficient Generation**: Scales to generate large datasets quickly.
-- **Save Capability**: Enables saving generated data locally for reuse.
-
----
-
-### Example Usage
+### **Example Usage**
 
 ```python
 from data.data_generator import generate_training_data
 
-# Example: Generate data based on probability distributions
+# Generate probability-based training data
 data = generate_training_data(
-    mode="P",  # Use P mode for probability-based data generation
-    win_length=10,  # Length of each sequence (number of frames)
-    note_max=12,  # Maximum number of notes per frame
-    pitch_range=(21, 108),  # Pitch range for the notes
-    num_samples=10000,  # Number of training samples to generate
+    mode="P",  # Probability-based generation
+    win_length=10,  # Sequence length (number of frames)
+    note_max=12,  # Max notes per frame
+    pitch_range=(21, 108),  # Pitch range
+    num_samples=10000,  # Number of samples to generate
     pitch_only=True,  # Generate pitch-only data
-    p_mean=64.0,  # Mean of the pitch Normal distribution
-    p_std=24.0,  # Standard deviation of the pitch Normal distribution
-    n_mean=6.0,  # Mean of the note count Normal distribution
-    n_std=2.5,  # Standard deviation of the note count Normal distribution
-    save_path="probability_based_data.pkl"  # Path to save the generated data
+    p_mean=64.0,  # Mean of pitch Normal distribution
+    p_std=24.0,  # Std deviation of pitch Normal distribution
+    n_mean=6.0,  # Mean of note count Normal distribution
+    n_std=2.5,  # Std deviation of note count Normal distribution
+    save_path="probability_based_data.pkl"  # Save path
 )
+```
+
+## Training  
+
+The training module supports different data sources and configurations. For real data (**R**), MIDI files need to be processed into JSON format using `from data.dataset import preprocess_and_save_midi_data`, and the generated file path should be set in `train_data_path`. In statistical-based mode (**S**), a `frame_dist_path` file is required, which is extracted from real MIDI data using `from dataset.data_analysis import extract_frame_distributions` and used to generate training data based on probability distributions. For completely random (**C**) and probability-based (**P**) modes, no pre-existing training data is needed, as it is generated dynamically according to predefined rules.  
+
+To start training, run the following command:  
+
+```bash
+python train.py --data_source R --train_data_path path/to/data.json
+```
+
+## Evaluation  
+
+The evaluation process is implemented in `eval/evaluate.py` using the `eval` method, which assesses the model's retrieval performance based on a given dataset. The evaluation requires several inputs:  
+
+- **Database Path (`db_path`)**: The folder path containing the MIDI files used as the retrieval database.  
+- **Query Path (`query_path`)**: The folder path containing the MIDI query files.  
+- **Ground Truth File (`gt_file_path`)**: A CSV file mapping query file names to their corresponding database file names for evaluation metrics computation.  
+- **Checkpoint Path (`checkpoint_path`)**: The path to the trained model's checkpoint for feature extraction.   
+
+For evaluation, we provide the **BeginnerPiano dataset** ([Download Link](https://example.com/BeginnerPiano)) along with a pre-trained model checkpoint ([Checkpoint Link](https://example.com/checkpoint)).
