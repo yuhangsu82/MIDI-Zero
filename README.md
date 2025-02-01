@@ -91,4 +91,4 @@ The evaluation process is implemented in `eval/evaluate.py` using the `eval` met
 - **Ground Truth File (`gt_file_path`)**: A CSV file mapping query file names to their corresponding database file names for evaluation metrics computation.  
 - **Checkpoint Path (`checkpoint_path`)**: The path to the trained model's checkpoint for feature extraction.   
 
-The **BeginnerPiano dataset** and the pre-trained model checkpoint can be downloaded from the following link:  [Dataset & Checkpoint Download](https://example.com/resources)
+The **BeginnerPiano dataset** can be downloaded from the following link:  [Dataset Download](https://pan.baidu.com/s/1fFzf1Qkm-El9c4BEgYCXYw), the extraction code is aw5v.
