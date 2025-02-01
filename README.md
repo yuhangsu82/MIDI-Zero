@@ -4,7 +4,7 @@
 
 ## **Method Overview**
 
-![MIDI-Zero Method](https://raw.githubusercontent.com/yuhangsu82/MIDI-Zero/refs/heads/main/assets/f1.jpg?token=GHSAT0AAAAAAC56SEQGHW4SQQ53OUCCRB2CZ4YPQFQ)
+![MIDI-Zero Method](assets/f1.jpg)
 
 ### **Processing Pipeline**
 MIDI-Zero standardizes MIDI representations as input, regardless of their origin, and processes them through the following stages:
