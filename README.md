@@ -84,7 +84,7 @@ python train.py --data_source R --train_data_path path/to/data.json
 
 ## Evaluation  
 
-The evaluation process is implemented in `eval/evaluate.py` using the `eval` method, which assesses the model's retrieval performance based on a given dataset. The evaluation requires several inputs:  
+The evaluation process is implemented in `eval.py` using the `eval` method, which assesses the model's retrieval performance based on a given dataset. The evaluation requires several inputs:  
 
 - **Database Path (`db_path`)**: The folder path containing the MIDI files used as the retrieval database.  
 - **Query Path (`query_path`)**: The folder path containing the MIDI query files.  
