@@ -229,22 +229,6 @@ def note_pitch_change(frame, pitch_change_range = [-2, -1, 1, 2], pitch_only=Tru
     return frame, -0.03 * abs(pitch_change)
 
 
-def add_notes(frame, num_notes=1, pitch_only=True):
-    """Randomly add a specified number of notes to a frame."""
-    for _ in range(num_notes):
-        new_note = random.choice(range(21, 109))  # Add a note within the MIDI pitch range
-        if pitch_only:
-            frame.append(new_note)
-        else:
-            frame.append([new_note, generate_random_duration()])
-    
-    if pitch_only:
-        frame = sorted(set(frame))
-    else:
-        frame = sorted(set(tuple(note) for note in frame), key=lambda x: x[0])
-    return frame, -0.03 * num_notes
-
-
 def insert_duplicate_frame(sequence):
     """Randomly insert a duplicate frame into the sequence."""
     ref_penalty = -0.1  # Reference penalty for similarity loss
