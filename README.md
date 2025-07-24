@@ -1,10 +1,8 @@
 # MIDI-Zero
 
-A self-supervised learning framework for content-based music retrieval (CBMR).
+**MIDI-Zero** is a self-supervised learning framework for content-based music retrieval (CBMR), supporting tasks such as **Audio Identification, Audio Matching, and Version Identification**. Operating entirely on **MIDI representations**, it eliminates the need for external labeled data by generating task-specific training data automatically. This provides a **robust and scalable solution** for bridging audio and symbolic music retrieval.
 
 ## **Method Overview**
-
-**MIDI-Zero** is a self-supervised learning framework for content-based music retrieval (CBMR), supporting tasks such as **Audio Identification, Audio Matching, and Version Identification**. Operating entirely on **MIDI representations**, it eliminates the need for external labeled data by generating task-specific training data automatically. This provides a **robust and scalable solution** for bridging audio and symbolic music retrieval.
 
 ![MIDI-Zero Method](assets/f1.jpg)
 
