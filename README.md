@@ -92,3 +92,15 @@ The evaluation process is implemented in `eval.py` using the `eval` method, whic
 - **Checkpoint Path (`checkpoint_path`)**: The path to the trained model's checkpoint for feature extraction.   
 
 The **BeginnerPiano dataset** can be downloaded from the following link:  [Dataset Download](https://pan.baidu.com/s/1rsesvzEPzHhqglHws_vZ5g), the extraction code is c8xq.
+
+## Citation
+Please cite the following paper if you use the code or dataset provided in this repository.
+
+```bibtex
+@inproceedings{su2025midi,
+  title={MIDI-Zero: A MIDI-driven Self-Supervised Learning Approach for Music Retrieval},
+  author={Su, Yuhang and Hu, Wei and Gao, Hongfeng and Zhang, Fan},
+  booktitle={Proceedings of the 48th International ACM SIGIR Conference on Research and Development in Information Retrieval},
+  pages={348--357},
+  year={2025}
+```
